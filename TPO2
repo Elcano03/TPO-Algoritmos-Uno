@@ -1,0 +1,186 @@
+def altaServicio(servicios):
+    nombre = input("Ingrese nombre del servicio: ")
+    descripcion = input("Ingrese descripcion: ")
+
+    while True:
+        try:
+            costo = float(input("Ingrese costo unitario: "))
+            break
+        except ValueError:
+            print("Debe ingresar un numero valido")
+
+    while True:
+        try:
+            unidades = int(input("Ingrese unidades disponibles: "))
+            break
+        except ValueError:
+            print("Debe ingresar un numero entero valido")
+
+    servicio = {
+        "id": len(servicios) + 1,
+        "nombre": nombre,
+        "descripcion": descripcion,
+        "costo": costo,
+        "unidades": unidades,
+        "activo": True
+    }
+    servicios.append(servicio)
+    print("Servicio agregado")
+
+def bajaServicio(servicios):
+    mostrarServicios(servicios)
+    try:
+        idBaja = int(input("Ingrese ID del servicio a dar de baja: "))
+    except ValueError:
+        print("ID invalido")
+        return
+
+    for s in servicios:
+        if s["id"] == idBaja and s["activo"]:
+            s["activo"] = False
+            print("Servicio dado de baja")
+            return
+    print("Servicio no encontrado o ya inactivo")
+
+def mostrarServicios(servicios):
+    print("\nLista de servicios:")
+    for s in servicios:
+        estado = "Activo" if s["activo"] else "Inactivo"
+        print(f'ID {s["id"]} - {s["nombre"]} (${s["costo"]}) [{estado}]')
+
+
+def altaEmpleado(empleados):
+    nombre = input("Nombre: ")
+    apellido = input("Apellido: ")
+    dni = input("DNI: ")
+    legajo = input("Legajo: ")
+
+    while True:
+        try:
+            sueldo = float(input("Sueldo: "))
+            break
+        except ValueError:
+            print("Debe ingresar un número valido")
+
+    tarea = input("Tarea: ")
+    tipo = int(input("Es encargado? (1.si/2.no): ")).lower()
+
+    empleado = {
+        "id": len(empleados) + 1,
+        "nombre": nombre,
+        "apellido": apellido,
+        "dni": dni,
+        "legajo": legajo,
+        "sueldo": sueldo,
+        "tarea": tarea,
+        "es encargado": (tipo == "s"),
+        "activo": True
+    }
+
+    if tipo == 1:
+        while True:
+            try:
+                plus = float(input("Ingrese plus del encargado: "))
+                empleado["plus"] = plus
+                break
+            except ValueError:
+                print("Debe ingresar un numero valido")
+
+    empleados.append(empleado)
+    print("Empleado agregado")
+
+def bajaEmpleado(empleados):
+    mostrarEmpleados(empleados)
+    try:
+        idBaja = int(input("Ingrese ID del empleado a dar de baja: "))
+    except ValueError:
+        print("ID invalido")
+        return
+
+    for e in empleados:
+        if e["id"] == idBaja and e["activo"]:
+            e["activo"] = False
+            print("Empleado dado de baja")
+            return
+    print("Empleado no encontrado o ya inactivo")
+
+def mostrarEmpleados(empleados):
+    print("\nLista de empleados:")
+    for e in empleados:
+        rol = "Encargado" if e["es encargado"] else "Empleado"
+        estado = "Activo" if e["activo"] else "Inactivo"
+        print(f'ID {e["id"]} - {e["apellido"]}, {e["nombre"]} ({rol}) [{estado}]')
+
+
+def crearEvento(eventos): 
+    cliente = input("Nombre cliente: ")
+    dniCliente = input("DNI cliente: ")
+    fecha = input("Fecha (dd/mm/aaaa): ")
+    hora = input("Hora (hh:mm): ")
+    tipo = input("Tipo de evento: ")
+
+    for ev in eventos:
+        if ev["fecha"] == fecha and ev["hora"] == hora:
+            print("Ya existe un evento en esa fecha y hora")
+            return
+
+    evento = {
+        "id": len(eventos) + 1,
+        "cliente": cliente,
+        "dni cliente": dniCliente,
+        "fecha": fecha,
+        "hora": hora,
+        "tipo": tipo
+    }
+    eventos.append(evento)
+    print("Evento creado")
+
+def mostrarEventos(eventos):
+    print("\nLista de eventos:")
+    for ev in eventos:
+        print(f'ID {ev["id"]} - {ev["fecha"]} {ev["hora"]} - {ev["tipo"]} (Cliente: {ev["cliente"]})')
+
+
+def menu():
+    servicios = []
+    empleados = []
+    eventos = []
+
+    while True:
+        print("\nMenu Principal:")
+        print("1. ABM Servicios")
+        print("2. ABM Empleados")
+        print("3. Eventos")
+        print("4. Salir")
+
+        opcion = input("Seleccione una opcion: ")
+
+        if opcion == "1":
+            print("\n1. Alta servicio\n2. Baja servicio\n3. Ver lista servicios")
+            sub = int(input("Opcion: "))
+            if sub == "1": altaServicio(servicios)
+            elif sub == "2": bajaServicio(servicios)
+            elif sub == "3": mostrarServicios(servicios)
+
+        elif opcion == "2":
+            print("\n1. Alta empleado\n2. Baja empleado\n3. Ver lista empleados")
+            sub = int(input("Opcion: "))
+            if sub == "1": altaEmpleado(empleados)
+            elif sub == "2": bajaEmpleado(empleados)
+            elif sub == "3": mostrarEmpleados(empleados)
+
+        elif opcion == "3":
+            print("\n1. Crear evento\n2. Ver lista eventos")
+            sub = int(input("Opcion: "))
+            if sub == "1": crearEvento(eventos)
+            elif sub == "2": mostrarEventos(eventos)
+
+        elif opcion == "4":
+            print("Finalizando carga")
+            break
+
+        else:
+            print("Opción invalida.")
+
+
+menu()
